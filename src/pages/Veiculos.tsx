@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -31,6 +30,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import api from '../utils/api';
 
 interface Veiculo {
   id: number;
@@ -80,12 +80,14 @@ const Veiculos = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [veiculosRes, clientesRes] = await Promise.all([
-        axios.get('http://localhost:3001/veiculos'),
-        axios.get('http://localhost:3001/clientes')
-      ]);
+      
+      // Buscar dados separadamente
+      const veiculosRes = await api.get('/veiculos');
       setVeiculos(veiculosRes.data);
+      
+      const clientesRes = await api.get('/clientes');
       setClientes(clientesRes.data);
+      
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
       setSnackbar({
@@ -127,7 +129,7 @@ const Veiculos = () => {
       [name]: name === 'ano' ? Number(value) : value
     }));
   };
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelectChange = (e: any) => {
     setFormData(prev => ({
       ...prev,
@@ -138,14 +140,14 @@ const Veiculos = () => {
   const handleSubmit = async () => {
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/veiculos/${editingId}`, formData);
+        await api.put(`/veiculos/${editingId}`, formData);
         setSnackbar({
           open: true,
           message: 'Veículo atualizado com sucesso',
           severity: 'success'
         });
       } else {
-        await axios.post('http://localhost:3001/veiculos', formData);
+        await api.post('/veiculos', formData);
         setSnackbar({
           open: true,
           message: 'Veículo adicionado com sucesso',
@@ -177,7 +179,7 @@ const Veiculos = () => {
   const handleDelete = async () => {
     if (veiculoParaDeletar) {
       try {
-        await axios.delete(`http://localhost:3001/veiculos/${veiculoParaDeletar}`);
+        await api.delete(`/veiculos/${veiculoParaDeletar}`);
         setSnackbar({
           open: true,
           message: 'Veículo excluído com sucesso',

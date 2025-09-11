@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -27,6 +26,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import api from '../utils/api';
 
 interface Servico {
   id: number;
@@ -76,7 +76,7 @@ const Servicos = () => {
   const fetchServicos = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3001/servicos');
+      const response = await api.get('/servicos');
       setServicos(response.data);
       setServicosFiltrados(response.data);
     } catch (error) {
@@ -127,14 +127,14 @@ const Servicos = () => {
   const handleSubmit = async () => {
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/servicos/${editingId}`, formData);
+        await api.put(`/servicos/${editingId}`, formData);
         setSnackbar({
           open: true,
           message: 'Serviço atualizado com sucesso',
           severity: 'success'
         });
       } else {
-        await axios.post('http://localhost:3001/servicos', formData);
+        await api.post('/servicos', formData);
         setSnackbar({
           open: true,
           message: 'Serviço adicionado com sucesso',
@@ -166,7 +166,7 @@ const Servicos = () => {
   const handleDelete = async () => {
     if (servicoParaDeletar) {
       try {
-        await axios.delete(`http://localhost:3001/servicos/${servicoParaDeletar}`);
+        await api.delete(`/servicos/${servicoParaDeletar}`);
         setSnackbar({
           open: true,
           message: 'Serviço excluído com sucesso',

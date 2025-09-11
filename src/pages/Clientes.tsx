@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -27,6 +26,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import api from '../utils/api';
 
 interface Cliente {
   id: number;
@@ -76,7 +76,7 @@ const Clientes = () => {
   const fetchClientes = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3001/clientes');
+      const response = await api.get('/clientes');
       setClientes(response.data);
       setClientesFiltrados(response.data);
     } catch (error) {
@@ -126,14 +126,14 @@ const Clientes = () => {
   const handleSubmit = async () => {
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/clientes/${editingId}`, formData);
+        await api.put(`/clientes/${editingId}`, formData);
         setSnackbar({
           open: true,
           message: 'Cliente atualizado com sucesso',
           severity: 'success'
         });
       } else {
-        await axios.post('http://localhost:3001/clientes', formData);
+        await api.post('/clientes', formData);
         setSnackbar({
           open: true,
           message: 'Cliente adicionado com sucesso',
@@ -164,7 +164,7 @@ const Clientes = () => {
   const handleDelete = async () => {
     if (clienteParaDeletar) {
       try {
-        await axios.delete(`http://localhost:3001/clientes/${clienteParaDeletar}`);
+        await api.delete(`/clientes/${clienteParaDeletar}`);
         setSnackbar({
           open: true,
           message: 'Cliente excluído com sucesso',

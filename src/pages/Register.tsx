@@ -10,7 +10,7 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import axios from 'axios';
+import api from '../utils/api';
 
 interface RegisterProps {
   onClose: () => void;
@@ -39,7 +39,7 @@ const Register = ({ onClose, onRegisterSuccess }: RegisterProps) => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3001/auth/register', {
+      const response = await api.post('/auth/register', {
         nome,
         email,
         telefone,

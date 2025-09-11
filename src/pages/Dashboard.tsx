@@ -1,6 +1,6 @@
 import { Box, Grid, Paper, Typography, Card, CardContent, CardHeader, List, ListItem, ListItemText, Divider } from '@mui/material';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 
 interface Cliente {
   id: string;
@@ -31,18 +31,21 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [clientesRes, veiculosRes, ordensRes] = await Promise.all([
-          axios.get('http://localhost:3001/clientes'),
-          axios.get('http://localhost:3001/veiculos'),
-          axios.get('http://localhost:3001/ordens_servico')
-        ]);
-
+        setLoading(true);
+        
+        // Buscar dados separadamente
+        const clientesRes = await api.get('/clientes');
         setClientes(clientesRes.data);
+        
+        const veiculosRes = await api.get('/veiculos');
         setVeiculos(veiculosRes.data);
+        
+        const ordensRes = await api.get('/ordens_servico');
         setOrdensServico(ordensRes.data);
-        setLoading(false);
+        
       } catch (error) {
         console.error('Erro ao carregar dados:', error);
+      } finally {
         setLoading(false);
       }
     };

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -38,6 +37,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import 'dayjs/locale/pt-br';
 import dayjs, { Dayjs } from 'dayjs';
+import api from '../utils/api';
 
 interface OrdemServico {
   id: string;
@@ -143,20 +143,25 @@ const OrdensServico = () => {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [ordensRes, veiculosRes, clientesRes, servicosRes, pecasRes] = await Promise.all([
-        axios.get('http://localhost:3001/ordens_servico'),
-        axios.get('http://localhost:3001/veiculos'),
-        axios.get('http://localhost:3001/clientes'),
-        axios.get('http://localhost:3001/servicos'),
-        axios.get('http://localhost:3001/pecas')
-      ]);
+      
+      // Buscar dados separadamente
+      const ordensRes = await api.get('/ordens_servico');
       const ordensData = ordensRes.data;
       setOrdens(ordensData);
       setOrdensFiltered(ordensData);
+      
+      const veiculosRes = await api.get('/veiculos');
       setVeiculos(veiculosRes.data);
+      
+      const clientesRes = await api.get('/clientes');
       setClientes(clientesRes.data);
+      
+      const servicosRes = await api.get('/servicos');
       setServicos(servicosRes.data);
+      
+      const pecasRes = await api.get('/pecas');
       setPecas(pecasRes.data);
+      
     } catch (error) {
       console.error('Erro ao buscar dados:', error);
       setSnackbar({
@@ -206,6 +211,7 @@ const OrdensServico = () => {
     }));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleSelectChange = (e: any) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -221,6 +227,7 @@ const OrdensServico = () => {
     }));
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleMultiSelectChange = (e: any, field: 'servicosIds' | 'pecasIds') => {
     const { value } = e.target;
     setFormData(prev => ({
@@ -274,7 +281,7 @@ const OrdensServico = () => {
     for (const pecaId of pecasIds) {
       const peca = pecas.find(p => p.id === pecaId);
       if (peca) {
-        await axios.put(`http://localhost:3001/pecas/${pecaId}`, {
+        await api.put(`/pecas/${pecaId}`, {
           ...peca,
           quantidade: peca.quantidade - 1
         });
@@ -300,7 +307,7 @@ const OrdensServico = () => {
         const ordemAntiga = ordens.find(o => o.id === editingId);
         const novasPecas = formData.pecasIds.filter(p => !ordemAntiga?.pecasIds.includes(p));
 
-        await axios.put(`http://localhost:3001/ordens_servico/${editingId}`, ordemData);
+        await api.put(`/ordens_servico/${editingId}`, ordemData);
         await atualizarEstoque(novasPecas);
 
         setSnackbar({
@@ -309,7 +316,7 @@ const OrdensServico = () => {
           severity: 'success'
         });
       } else {
-        await axios.post('http://localhost:3001/ordens_servico', ordemData);
+        await api.post('/ordens_servico', ordemData);
         await atualizarEstoque(formData.pecasIds);
 
         setSnackbar({
@@ -343,7 +350,7 @@ const OrdensServico = () => {
   const handleDelete = async () => {
     if (ordemParaDeletar) {
       try {
-        await axios.delete(`http://localhost:3001/ordens_servico/${ordemParaDeletar}`);
+        await api.delete(`/ordens_servico/${ordemParaDeletar}`);
         setSnackbar({
           open: true,
           message: 'Ordem de serviço excluída com sucesso',
@@ -670,6 +677,7 @@ const OrdensServico = () => {
     aplicarFiltros(valorFiltro, filtroStatus);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFiltroStatusChange = (event: any) => {
     const status = event.target.value;
     setFiltroStatus(status);
@@ -871,6 +879,7 @@ const OrdensServico = () => {
                     <TableCell>
                       <Chip
                         label={ordem.status}
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         color={getStatusChipColor(ordem.status) as any}
                         size="small"
                       />

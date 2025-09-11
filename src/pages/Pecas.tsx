@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
   Box,
   Button,
@@ -27,6 +26,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SearchIcon from '@mui/icons-material/Search';
+import api from '../utils/api';
 
 interface Peca {
   id: number;
@@ -76,7 +76,7 @@ const Pecas = () => {
   const fetchPecas = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3001/pecas');
+      const response = await api.get('/pecas');
       setPecas(response.data);
       setPecasFiltradas(response.data);
     } catch (error) {
@@ -128,14 +128,14 @@ const Pecas = () => {
   const handleSubmit = async () => {
     try {
       if (editingId) {
-        await axios.put(`http://localhost:3001/pecas/${editingId}`, formData);
+        await api.put(`/pecas/${editingId}`, formData);
         setSnackbar({
           open: true,
           message: 'Peça atualizada com sucesso',
           severity: 'success'
         });
       } else {
-        await axios.post('http://localhost:3001/pecas', formData);
+        await api.post('/pecas', formData);
         setSnackbar({
           open: true,
           message: 'Peça adicionada com sucesso',
@@ -167,7 +167,7 @@ const Pecas = () => {
   const handleDelete = async () => {
     if (pecaParaDeletar) {
       try {
-        await axios.delete(`http://localhost:3001/pecas/${pecaParaDeletar}`);
+        await api.delete(`/pecas/${pecaParaDeletar}`);
         setSnackbar({
           open: true,
           message: 'Peça excluída com sucesso',

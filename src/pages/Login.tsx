@@ -18,8 +18,8 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
-import axios from 'axios';
 import Register from './Register';
+import api from '../utils/api';
 
 const defaultTheme = createTheme();
 
@@ -54,7 +54,7 @@ const Login = ({ onLogin }: LoginProps) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/auth/login', {
+      const response = await api.post('/auth/login', {
         email,
         senha
       });
