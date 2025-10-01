@@ -20,7 +20,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import Register from './Register';
 import api from '../utils/api';
-import logo from "../assets/White.png";
+import logo from '../assets/logo.png'
 
 const defaultTheme = createTheme();
 
@@ -125,29 +125,12 @@ const Login = ({ onLogin }: LoginProps) => {
               src={logo}
               alt="Logo"
               sx={{
-                width: 200,
-                height: 100,
-                mb: 3,
-                borderRadius: '10px',
+                width: 250,
+                height: 90,
+                mb: 1,
                 objectFit: 'cover'
               }}
             />
-            
-            <Typography 
-              component="h1" 
-              variant="h4" 
-              sx={{ 
-                mb: 2,
-                fontWeight: 700,
-                background: 'linear-gradient(45deg, #1a237e 30%, #ff6f00 90%)',
-                backgroundClip: 'text',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                textAlign: 'center'
-              }}
-            >
-              Auto Tech
-            </Typography>
             
             <Typography 
               variant="body2" 

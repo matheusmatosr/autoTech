@@ -8,6 +8,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
+import logo from '../assets/logoMenor.jpeg'
 
 interface NavbarProps {
   user: { nome: string, email: string } | null;
@@ -84,7 +85,7 @@ const Navbar = ({ user, onLogout }: NavbarProps) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="static" color="primary">
-        <Toolbar>
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           {isMobile && (
             <IconButton
               color="inherit"
@@ -96,15 +97,21 @@ const Navbar = ({ user, onLogout }: NavbarProps) => {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-          >
-            AutoTech
-          </Typography>
+          <Box
+            component="img"
+            src={logo}
+            alt="Logo"
+            sx={{
+              width: 150,
+              height: 65,
+              border: '1px solid blue', 
+              borderRadius: 1.5,            
+              padding: '2px',
+              ml: 10             
+            }}
+          />
           {!isMobile && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
               {navItems.map((item) => (
                 <Button 
                   key={item.text} 
@@ -125,37 +132,36 @@ const Navbar = ({ user, onLogout }: NavbarProps) => {
                   {item.text}
                 </Button>
               ))}
-              <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-                <IconButton
-                  onClick={handleMenuOpen}
-                  sx={{ p: 0 }}
-                >
-                  <Avatar sx={{ bgcolor: 'secondary.main' }}>
-                    {user?.nome.charAt(0).toUpperCase()}
-                  </Avatar>
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                >
-                  <MenuItem disabled>
-                    <Typography variant="subtitle1">{user?.nome}</Typography>
-                  </MenuItem>
-                  <MenuItem disabled>
-                    <Typography variant="body2">{user?.email}</Typography>
-                  </MenuItem>
-                  <MenuItem onClick={handleLogout}>
-                    <ListItemIcon>
-                      <LogoutIcon fontSize="small" />
-                    </ListItemIcon>
-                    Sair
-                  </MenuItem>
-                </Menu>
-              </Box>
+              <IconButton
+                onClick={handleMenuOpen}
+                sx={{ p: 0, ml: 2 }}
+              >
+                <Avatar sx={{ bgcolor: 'secondary.main' }}>
+                  {user?.nome.charAt(0).toUpperCase()}
+                </Avatar>
+              </IconButton>
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem disabled>
+                  <Typography variant="subtitle1">{user?.nome}</Typography>
+                </MenuItem>
+                <MenuItem disabled>
+                  <Typography variant="body2">{user?.email}</Typography>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  Sair
+                </MenuItem>
+              </Menu>
             </Box>
           )}
         </Toolbar>
+
       </AppBar>
       <Box component="nav">
         <Drawer
