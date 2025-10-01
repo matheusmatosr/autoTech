@@ -48,9 +48,6 @@ const Navbar = ({ user, onLogout }: NavbarProps) => {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        AutoTech
-      </Typography>
       <List>
         {navItems.map((item) => (
           <ListItem 
