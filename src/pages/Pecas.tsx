@@ -280,7 +280,25 @@ const Pecas = () => {
           <CircularProgress />
         </Box>
       ) : (
-        <TableContainer component={Paper} elevation={3} sx={{ overflowX: 'auto' }}>
+        <TableContainer 
+          component={Paper} 
+          elevation={3} 
+          sx={{ 
+            overflowX: 'auto', 
+            maxHeight: 500,
+            overflowY: 'auto',
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#cbd5e1',
+              borderRadius: 3,
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f1f5f9',
+            },
+          }}
+        >
           <Table>
             <TableHead>
               <TableRow>
