@@ -1,5 +1,17 @@
-import { AppBar, Box, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemIcon, ListItemText, useMediaQuery, useTheme, Avatar, Menu, MenuItem } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { 
+  Box, 
+  Drawer, 
+  List, 
+  ListItem, 
+  ListItemIcon, 
+  ListItemText, 
+  Typography, 
+  Avatar, 
+  useMediaQuery,
+  useTheme,
+  IconButton
+} from '@mui/material';
+import { Link, useLocation } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
@@ -8,7 +20,7 @@ import BuildIcon from '@mui/icons-material/Build';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useState } from 'react';
-import logo from '../assets/logoMenor.jpeg'
+import logo from '../assets/logoMenor.jpeg';
 
 interface NavbarProps {
   user: { nome: string, email: string } | null;
@@ -21,164 +33,196 @@ const navItems = [
   { text: 'Veículos', path: '/veiculos', icon: <DirectionsCarIcon /> },
   { text: 'Serviços', path: '/servicos', icon: <BuildIcon /> },
   { text: 'Peças', path: '/pecas', icon: <BuildIcon /> },
-  { text: 'OS', path: '/ordens', icon: <AssignmentIcon /> },
+  { text: 'Ordem de serviço', path: '/ordens', icon: <AssignmentIcon /> },
 ];
+
+const drawerWidth = 240;
 
 const Navbar = ({ user, onLogout }: NavbarProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const location = useLocation();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
   const handleLogout = () => {
-    handleMenuClose();
     onLogout();
   };
 
   const drawer = (
-    <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <List>
-        {navItems.map((item) => (
-          <ListItem 
-            component={Link} 
-            to={item.path} 
-            key={item.text}
+    <Box sx={{ 
+      height: '100%', 
+      display: 'flex', 
+      flexDirection: 'column',
+      background: 'linear-gradient(180deg, #1a237e 0%, #303f9f 100%)',
+      color: 'white'
+    }}>
+      {/* Logo */}
+      <Box sx={{ 
+        p: 2, 
+        textAlign: 'center',
+        borderBottom: '1px solid rgba(255,255,255,0.1)'
+      }}>
+        <Box
+          component="img"
+          src={logo}
+          alt="Logo"
+          sx={{
+            width: '100%',
+            maxWidth: 150,
+            height: 'auto',
+            border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: 1.5,
+            padding: '2px',
+            backgroundColor: 'white'
+          }}
+        />
+      </Box>
+
+      {/* Menu Items */}
+      <List sx={{ flexGrow: 1, p: 1 }}>
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <ListItem 
+              component={Link} 
+              to={item.path} 
+              key={item.text}
+              sx={{ 
+                color: 'inherit',
+                textDecoration: 'none',
+                borderRadius: 2,
+                mb: 0.5,
+                backgroundColor: isActive ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
+                '&:hover': { 
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                },
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out'
+              }}
+            >
+              <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText 
+                primary={item.text} 
+                primaryTypographyProps={{
+                  fontSize: '0.9rem',
+                  fontWeight: isActive ? 600 : 400
+                }}
+              />
+            </ListItem>
+          );
+        })}
+      </List>
+
+      {/* User Info and Logout */}
+      <Box sx={{ 
+        p: 2, 
+        borderTop: '1px solid rgba(255,255,255,0.1)',
+        backgroundColor: 'rgba(0,0,0,0.1)'
+      }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Avatar 
             sx={{ 
-              color: 'inherit',
-              textDecoration: 'none',
-              '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-              cursor: 'pointer'
+              bgcolor: 'secondary.main', 
+              width: 32, 
+              height: 32,
+              mr: 1,
+              fontSize: '0.8rem'
             }}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
-          </ListItem>
-        ))}
+            {user?.nome.charAt(0).toUpperCase()}
+          </Avatar>
+          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+            <Typography variant="subtitle2" noWrap sx={{ fontSize: '0.8rem' }}>
+              {user?.nome}
+            </Typography>
+            <Typography variant="caption" noWrap sx={{ 
+              fontSize: '0.7rem',
+              opacity: 0.8
+            }}>
+              {user?.email}
+            </Typography>
+          </Box>
+        </Box>
+        
         <ListItem 
           onClick={handleLogout}
           sx={{ 
             color: 'inherit',
             textDecoration: 'none',
-            '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' },
-            cursor: 'pointer'
+            borderRadius: 2,
+            '&:hover': { 
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            },
+            cursor: 'pointer',
+            transition: 'all 0.2s ease-in-out'
           }}
         >
-          <ListItemIcon><LogoutIcon /></ListItemIcon>
-          <ListItemText primary="Sair" />
+          <ListItemIcon sx={{ color: 'inherit', minWidth: 40 }}>
+            <LogoutIcon />
+          </ListItemIcon>
+          <ListItemText 
+            primary="Sair" 
+            primaryTypographyProps={{
+              fontSize: '0.9rem'
+            }}
+          />
         </ListItem>
-      </List>
+      </Box>
     </Box>
   );
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar position="static" color="primary">
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          {isMobile && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ mr: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Box
-            component="img"
-            src={logo}
-            alt="Logo"
-            sx={{
-              width: 150,
-              height: 65,
-              border: '1px solid blue', 
-              borderRadius: 1.5,            
-              padding: '2px',
-              ml: 10             
-            }}
-          />
-          {!isMobile && (
-            <Box sx={{ display: 'flex', alignItems: 'center', ml: 2 }}>
-              {navItems.map((item) => (
-                <Button 
-                  key={item.text} 
-                  component={Link} 
-                  to={item.path} 
-                  sx={{ 
-                    color: '#ffffff',
-                    mx: 1,
-                    fontWeight: 600,
-                    padding: '8px 16px',
-                    '&:hover': { 
-                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                      boxShadow: '0 0 5px rgba(255, 255, 255, 0.3)'
-                    } 
-                  }}
-                  startIcon={item.icon}
-                >
-                  {item.text}
-                </Button>
-              ))}
-              <IconButton
-                onClick={handleMenuOpen}
-                sx={{ p: 0, ml: 2 }}
-              >
-                <Avatar sx={{ bgcolor: 'secondary.main' }}>
-                  {user?.nome.charAt(0).toUpperCase()}
-                </Avatar>
-              </IconButton>
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem disabled>
-                  <Typography variant="subtitle1">{user?.nome}</Typography>
-                </MenuItem>
-                <MenuItem disabled>
-                  <Typography variant="body2">{user?.email}</Typography>
-                </MenuItem>
-                <MenuItem onClick={handleLogout}>
-                  <ListItemIcon>
-                    <LogoutIcon fontSize="small" />
-                  </ListItemIcon>
-                  Sair
-                </MenuItem>
-              </Menu>
-            </Box>
-          )}
-        </Toolbar>
-
-      </AppBar>
-      <Box component="nav">
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true,
-          }}
+      {/* Mobile Menu Button */}
+      {isMobile && (
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
           sx={{
-            display: { xs: 'block', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 240 },
+            position: 'fixed',
+            top: 16,
+            left: 16,
+            zIndex: theme.zIndex.drawer + 1,
+            backgroundColor: 'primary.main',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'primary.dark',
+            }
           }}
         >
-          {drawer}
-        </Drawer>
-      </Box>
+          <MenuIcon />
+        </IconButton>
+      )}
+
+      {/* Desktop Sidebar */}
+      <Drawer
+        variant={isMobile ? "temporary" : "permanent"}
+        open={isMobile ? mobileOpen : true}
+        onClose={handleDrawerToggle}
+        ModalProps={{
+          keepMounted: true,
+        }}
+        sx={{
+          width: drawerWidth,
+          flexShrink: 0,
+          '& .MuiDrawer-paper': {
+            width: drawerWidth,
+            boxSizing: 'border-box',
+            border: 'none',
+            boxShadow: '2px 0 10px rgba(0,0,0,0.1)'
+          },
+        }}
+      >
+        {drawer}
+      </Drawer>
     </Box>
   );
 };

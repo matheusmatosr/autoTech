@@ -1,5 +1,4 @@
-// App.tsx - Tema atualizado
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { ThemeProvider, createTheme, CssBaseline, useMediaQuery } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Container } from '@mui/material';
 import { ptBR } from '@mui/material/locale';
@@ -118,6 +117,8 @@ const theme = createTheme(
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<{ nome: string, email: string } | null>(null);
+  // const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const handleLogin = (userData: { nome: string, email: string }) => {
     setIsAuthenticated(true);
@@ -134,7 +135,17 @@ function App() {
       <CssBaseline />
       <Router>
         {isAuthenticated && <Navbar user={user} onLogout={handleLogout} />}
-        <Container maxWidth="xl" sx={{ mt: isAuthenticated ? 4 : 0, mb: 4, px: { xs: 2, sm: 3 } }}>
+        <Container 
+          maxWidth="xl" 
+          sx={{ 
+            mt: isAuthenticated ? 4 : 0, 
+            mb: 4, 
+            px: { xs: 2, sm: 3 },
+            ml: isAuthenticated && !isMobile ? `240px` : 0,
+            width: isAuthenticated && !isMobile ? `calc(100% - 240px)` : '100%',
+            transition: 'all 0.3s ease-in-out'
+          }}
+        >
           <Routes>
             <Route path="/login" element={!isAuthenticated ? <Login onLogin={handleLogin} /> : <Navigate to="/" />} />
             <Route path="/" element={isAuthenticated ? <Dashboard /> : <Navigate to="/login" />} />

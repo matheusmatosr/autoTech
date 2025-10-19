@@ -257,6 +257,7 @@ const Servicos = () => {
       });
       setServicosFiltrados(servicosOrdenados);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [servicos]);
 
   return (

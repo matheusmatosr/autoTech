@@ -49,6 +49,7 @@ interface OrdemServico {
   servicosIds: string[];
   pecasIds: string[];
   valorTotal: number;
+  mecanico: string;
 }
 
 interface Veiculo {
@@ -93,6 +94,7 @@ interface OrdemServicoFormData {
   servicosIds: string[];
   pecasIds: string[];
   valorTotal: number;
+  mecanico: string;
 }
 
 const statusOptions = [
@@ -112,7 +114,8 @@ const ordemVazia: OrdemServicoFormData = {
   descricao: '',
   servicosIds: [],
   pecasIds: [],
-  valorTotal: 0
+  valorTotal: 0,
+  mecanico: ''
 };
 
 const OrdensServico = () => {
@@ -188,7 +191,8 @@ const OrdensServico = () => {
         descricao: ordem.descricao,
         servicosIds: ordem.servicosIds,
         pecasIds: ordem.pecasIds,
-        valorTotal: ordem.valorTotal
+        valorTotal: ordem.valorTotal,
+        mecanico: ordem.mecanico
       });
       setEditingId(ordem.id);
     } else {
@@ -514,6 +518,15 @@ const OrdensServico = () => {
             margin-top: 10px;
             text-align: center;
           }
+          .mecanico-info {
+            background-color: #f0f8ff;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #0d47a1;
+            width: 100%;
+            box-sizing: border-box; 
+          }
           @media print {
             .no-print {
               display: none;
@@ -524,8 +537,17 @@ const OrdensServico = () => {
       <body>
         <div class="header">
           <div class="title">ORDEM DE SERVIÇO #${ordem.id}</div>
-          <div>Oficina Mecânica</div>
+          <div>Oficina ReAuto</div>
         </div>
+        
+        ${ordem.mecanico ? `
+          <div class="mecanico-info">
+            <div style="display: flex; align-items: center;">
+              <div style="font-weight: bold; min-width: 180px; margin-right: 10px">Mecânico Responsável:</div>
+              <div style="font-size: 16px;"><strong> ${ordem.mecanico}</strong></div>
+            </div>
+          </div>
+        ` : ''}
         
         <div class="section">
           <div class="section-title">Informações do Cliente</div>
@@ -592,7 +614,7 @@ const OrdensServico = () => {
             </thead>
             <tbody>
               ${servicosSelecionados.length > 0 ?
-        servicosSelecionados.map(servico => `
+                servicosSelecionados.map(servico => `
                   <tr>
                     <td>${servico.nome}</td>
                     <td>${servico.descricao}</td>
@@ -600,8 +622,8 @@ const OrdensServico = () => {
                     <td>${formatarValor(servico.valor)}</td>
                   </tr>
                 `).join('') :
-        '<tr><td colspan="4" style="text-align: center">Nenhum serviço registrado</td></tr>'
-      }
+                '<tr><td colspan="4" style="text-align: center">Nenhum serviço registrado</td></tr>'
+              }
             </tbody>
           </table>
         </div>
@@ -619,7 +641,7 @@ const OrdensServico = () => {
             </thead>
             <tbody>
               ${pecasSelecionadas.length > 0 ?
-        pecasSelecionadas.map(peca => `
+                pecasSelecionadas.map(peca => `
                   <tr>
                     <td>${peca.nome}</td>
                     <td>${peca.codigo}</td>
@@ -627,8 +649,8 @@ const OrdensServico = () => {
                     <td>${formatarValor(peca.preco)}</td>
                   </tr>
                 `).join('') :
-        '<tr><td colspan="4" style="text-align: center">Nenhuma peça utilizada</td></tr>'
-      }
+                '<tr><td colspan="4" style="text-align: center">Nenhuma peça utilizada</td></tr>'
+              }
             </tbody>
           </table>
         </div>
@@ -647,7 +669,7 @@ const OrdensServico = () => {
         </div>
         
         <div class="footer">
-          <p>Oficina Mecânica - Documento gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
+          <p>Oficina ReAuto - Documento gerado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
         </div>
         
         <div class="no-print" style="text-align: center; margin-top: 20px;">
@@ -876,6 +898,15 @@ const OrdensServico = () => {
                 </TableCell>
                 <TableCell>
                   <TableSortLabel
+                    active={ordenacao.campo === 'mecanico'}
+                    direction={ordenacao.campo === 'mecanico' ? ordenacao.direcao : 'asc'}
+                    onClick={() => handleOrdenacaoChange('mecanico')}
+                  >
+                    Mecânico
+                  </TableSortLabel>
+                </TableCell>
+                <TableCell>
+                  <TableSortLabel
                     active={ordenacao.campo === 'valorTotal'}
                     direction={ordenacao.campo === 'valorTotal' ? ordenacao.direcao : 'asc'}
                     onClick={() => handleOrdenacaoChange('valorTotal')}
@@ -902,6 +933,7 @@ const OrdensServico = () => {
                         size="small"
                       />
                     </TableCell>
+                    <TableCell>{ordem.mecanico || 'Não informado'}</TableCell>
                     <TableCell>{formatarValor(ordem.valorTotal)}</TableCell>
                     <TableCell align="center">
                       <IconButton
@@ -1070,6 +1102,19 @@ const OrdensServico = () => {
                   ))}
                 </Select>
               </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                margin="dense"
+                name="mecanico"
+                label="Mecânico Responsável"
+                type="text"
+                fullWidth
+                variant="outlined"
+                value={formData.mecanico}
+                onChange={handleInputChange}
+                placeholder="Digite o nome do mecânico"
+              />
             </Grid>
             <Grid item xs={12}>
               <Typography variant="h6" sx={{ mt: 2, mb: 1 }}>
