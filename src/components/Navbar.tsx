@@ -75,7 +75,6 @@ const Navbar = ({ user, onLogout }: NavbarProps) => {
           alt="Logo"
           sx={{
             width: '100%',
-            maxWidth: 150,
             height: 'auto',
             border: '1px solid rgba(255,255,255,0.3)',
             borderRadius: 1.5,
