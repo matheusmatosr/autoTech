@@ -17,8 +17,10 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import BuildIcon from '@mui/icons-material/Build';
-import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogoutIcon from '@mui/icons-material/Logout';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { useState } from 'react';
 import logo from '../assets/logoMenor.jpeg';
 
@@ -32,8 +34,9 @@ const navItems = [
   { text: 'Clientes', path: '/clientes', icon: <PeopleIcon /> },
   { text: 'Veículos', path: '/veiculos', icon: <DirectionsCarIcon /> },
   { text: 'Serviços', path: '/servicos', icon: <BuildIcon /> },
-  { text: 'Peças', path: '/pecas', icon: <BuildIcon /> },
-  { text: 'Ordem de serviço', path: '/ordens', icon: <AssignmentIcon /> },
+  { text: 'Peças', path: '/pecas', icon: <InventoryIcon /> },
+  { text: 'Orçamentos', path: '/orcamentos', icon: <RequestQuoteIcon /> },
+  { text: 'Ordem de serviço', path: '/ordens', icon: <AssignmentTurnedInIcon /> },
 ];
 
 const drawerWidth = 240;
