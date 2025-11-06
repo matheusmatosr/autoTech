@@ -13,6 +13,7 @@ import Login from './pages/Login';
 import { useState } from 'react';
 import './App.css'
 import Orcamentos from './pages/Orcamentos';
+import Faturamento from './pages/Faturamento';
 
 const theme = createTheme(
   {
@@ -156,6 +157,7 @@ function App() {
             <Route path="/pecas" element={isAuthenticated ? <Pecas /> : <Navigate to="/login" />} />
             <Route path="/ordens" element={isAuthenticated ? <OrdensServico /> : <Navigate to="/login" />} />
             <Route path="/orcamentos" element={isAuthenticated ? <Orcamentos /> : <Navigate to="/login" />} />
+            <Route path="/faturamento" element={isAuthenticated ? <Faturamento /> : <Navigate to="/login" />} />
           </Routes>
         </Container>
       </Router>

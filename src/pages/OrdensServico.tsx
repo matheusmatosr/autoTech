@@ -50,6 +50,7 @@ interface OrdemServico {
   pecasIds: string[];
   valorTotal: number;
   mecanico: string;
+  maoDeObra: number;
 }
 
 interface Veiculo {
@@ -95,6 +96,7 @@ interface OrdemServicoFormData {
   pecasIds: string[];
   valorTotal: number;
   mecanico: string;
+  maoDeObra: number;
 }
 
 const statusOptions = [
@@ -115,7 +117,8 @@ const ordemVazia: OrdemServicoFormData = {
   servicosIds: [],
   pecasIds: [],
   valorTotal: 0,
-  mecanico: ''
+  mecanico: '',
+  maoDeObra: 0
 };
 
 const OrdensServico = () => {
@@ -192,7 +195,8 @@ const OrdensServico = () => {
         servicosIds: ordem.servicosIds,
         pecasIds: ordem.pecasIds,
         valorTotal: ordem.valorTotal,
-        mecanico: ordem.mecanico
+        mecanico: ordem.mecanico,
+        maoDeObra: ordem.maoDeObra
       });
       setEditingId(ordem.id);
     } else {
@@ -1114,6 +1118,21 @@ const OrdensServico = () => {
                 value={formData.mecanico}
                 onChange={handleInputChange}
                 placeholder="Digite o nome do mecânico"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                margin="dense"
+                name="maoDeObra"
+                label="Mão de Obra"
+                type="number"
+                fullWidth
+                variant="outlined"
+                value={formData.maoDeObra}
+                onChange={handleInputChange}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start">R$</InputAdornment>,
+                }}
               />
             </Grid>
             <Grid item xs={12}>

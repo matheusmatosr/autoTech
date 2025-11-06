@@ -21,6 +21,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { useState } from 'react';
 import logo from '../assets/logoMenor.jpeg';
 
@@ -37,6 +38,7 @@ const navItems = [
   { text: 'Peças', path: '/pecas', icon: <InventoryIcon /> },
   { text: 'Orçamentos', path: '/orcamentos', icon: <RequestQuoteIcon /> },
   { text: 'Ordem de serviço', path: '/ordens', icon: <AssignmentTurnedInIcon /> },
+  { text: 'Faturamento', path: '/faturamento', icon: <TrendingUpIcon /> },
 ];
 
 const drawerWidth = 240;
